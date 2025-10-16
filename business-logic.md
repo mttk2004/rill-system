@@ -20,12 +20,13 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - Người dùng đã đăng ký và đăng nhập hệ thống
 - **Quyền hạn**:
   - Xem danh sách và chi tiết sản phẩm
-  - Thêm/xóa sản phẩm vào giỏ hàng
+  - Thêm/xóa/sửa sản phẩm vào giỏ hàng
   - Đặt hàng và thanh toán COD
   - Quản lý địa chỉ giao hàng
   - Xem lịch sử đơn hàng
   - Sử dụng voucher giảm giá
   - Cập nhật thông tin cá nhân
+  - Đánh giá sản phẩm đã mua
 
 ### 2.2. Admin (Quản trị viên)
 - Người quản lý toàn bộ hệ thống
@@ -123,11 +124,9 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   2. Chọn địa chỉ giao hàng
   3. Áp dụng voucher giảm giá (tùy chọn)
   4. Kiểm tra tồn kho real-time
-  5. Xác nhận thông tin đơn hàng
-  6. Tạo đơn hàng với trạng thái "Chờ xác nhận"
-  7. Tạo phiếu thanh toán COD
-  8. Lưu địa chỉ giao hàng vào đơn hàng
-  9. Xóa sản phẩm khỏi giỏ hàng
+  5. Tạo đơn hàng với trạng thái "Chờ xác nhận"
+  6. Lưu địa chỉ giao hàng vào đơn hàng
+  7. Xóa sản phẩm khỏi giỏ hàng
 - **Quy tắc nghiệp vụ**:
   - Voucher được đánh dấu "đã sử dụng" khi đặt hàng
   - Tồn kho chưa bị trừ tại thời điểm đặt hàng
