@@ -122,6 +122,7 @@ Hệ thống Rill bao gồm 11 class chính được chia thành các nhóm:
 - Nhiều Product có nhiều Artist (m:n qua ProductArtist)
 - 1 Product có nhiều CartItem (1:n)
 - 1 Product có nhiều OrderItem (1:n)
+- 1 Product có nhiều Review (1:n)
 
 ---
 
