@@ -7,9 +7,10 @@
 Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl records) trực tuyến, phục vụ cộng đồng người yêu nhạc và sưu tầm đĩa than tại Việt Nam.
 
 ### 1.2. Phạm vi hệ thống (Đơn giản hóa cho phân tích)
-- **Thanh toán**: Chỉ hỗ trợ COD (Cash on Delivery)
-- **Vai trò người dùng**: Admin và Customer (2 vai trò)
-- **Quản lý tồn kho**: Kiểm tra stock real-time tại checkout
+- **Thanh toán**: Chỉ hỗ trợ COD (Cash on Delivery), thông tin thanh toán được quản lý trong đơn hàng.
+- **Vai trò người dùng**: Admin và Customer (2 vai trò).
+- **Quản lý tồn kho**: Kiểm tra stock real-time tại checkout.
+- **Nghệ sĩ**: Mỗi sản phẩm chỉ do một nghệ sĩ chính thực hiện.
 
 ---
 
@@ -98,7 +99,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - **Luồng chính**:
   1. Thêm/sửa/xóa sản phẩm
   2. Cập nhật thông tin sản phẩm (tên, giá, mô tả)
-  3. Liên kết với nghệ sĩ
+  3. Gán một nghệ sĩ cho sản phẩm
   4. Cập nhật số lượng tồn kho
   5. Thiết lập giá và giá khuyến mãi
 
@@ -123,7 +124,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   2. Chọn địa chỉ giao hàng
   3. Kiểm tra tồn kho real-time (nếu có sản phẩm hết hàng, báo lỗi)
   4. Tạo đơn hàng với trạng thái "Chờ xác nhận"
-  5. Lưu địa chỉ giao hàng vào đơn hàng
+  5. Lưu địa chỉ giao hàng và thông tin thanh toán (COD) vào đơn hàng
   6. Xóa sản phẩm khỏi giỏ hàng
 - **Quy tắc nghiệp vụ**:
   - Tồn kho chưa bị trừ tại thời điểm đặt hàng
@@ -140,12 +141,10 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   4. Xác nhận đơn hàng:
      - Trạng thái: "Chờ xác nhận" → "Đã xác nhận"
      - Trừ số lượng tồn kho
-     - Ghi nhận lịch sử trạng thái
 - **Luồng hủy đơn hàng (Admin)**:
   1. Admin chọn "Hủy đơn hàng".
   2. Nhập lý do hủy.
   3. Trạng thái: "Chờ xác nhận" → "Đã hủy".
-  4. Không trừ tồn kho.
 - **Luồng ngoại lệ (Exception Flow)**:
   1. Khi Admin xác nhận, hệ thống kiểm tra lại tồn kho lần cuối.
   2. Nếu có sản phẩm hết hàng, hệ thống báo lỗi và không cho phép xác nhận.
@@ -161,8 +160,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   ```
 - **Quy tắc**:
   - "Đã xác nhận" → "Đang giao": Khi giao cho shipper
-  - "Đang giao" → "Đã giao": Khi khách nhận hàng
-  - "Đã giao": Thanh toán hoàn tất
+  - "Đang giao" → "Đã giao": Khi khách nhận hàng. Trạng thái thanh toán của đơn hàng tự động cập nhật thành "Hoàn tất".
 
 #### UC-11: Hủy đơn hàng (Customer)
 - **Actor**: Customer
@@ -194,14 +192,15 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 ## 4. Quy tắc nghiệp vụ tổng hợp
 
 ### 4.1. Quy tắc sản phẩm
-- Mỗi sản phẩm phải có nghệ sĩ
-- Tồn kho không được âm
-- Giá khuyến mãi phải nhỏ hơn giá gốc
+- Mỗi sản phẩm phải có một nghệ sĩ chính.
+- Tồn kho không được âm.
+- Giá khuyến mãi phải nhỏ hơn giá gốc.
 
 ### 4.2. Quy tắc đơn hàng
 - Đơn hàng chỉ có thể bị hủy từ trạng thái "Chờ xác nhận" (bởi Admin hoặc Customer).
 - Tồn kho chỉ bị trừ khi đơn hàng được Admin xác nhận.
 - Địa chỉ giao hàng được lưu vào đơn hàng tại thời điểm đặt hàng.
+- Phương thức thanh toán mặc định là COD và trạng thái thanh toán được quản lý bên trong đơn hàng.
 
 ### 4.3. Quy tắc giỏ hàng
 - Kiểm tra tồn kho tại thời điểm thanh toán.
@@ -213,11 +212,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - Email phải duy nhất.
 - Chỉ 1 địa chỉ có thể là mặc định.
 
-### 4.5. Quy tắc thanh toán
-- Chỉ hỗ trợ thanh toán COD.
-- Trạng thái thanh toán liên kết với trạng thái đơn hàng.
-
-### 4.6. Quy tắc đánh giá
+### 4.5. Quy tắc đánh giá
 - Khách hàng chỉ được đánh giá sản phẩm họ đã mua và nhận hàng thành công.
 - Mỗi mục sản phẩm trong đơn hàng chỉ được đánh giá một lần duy nhất.
 
@@ -249,8 +244,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
    - XÁC NHẬN → Trừ tồn kho, cập nhật trạng thái (Báo lỗi nếu hết hàng)
    - HỦY → Không thay đổi tồn kho, cập nhật trạng thái
 6. Cập nhật "Đang giao" khi giao cho shipper
-7. Cập nhật "Đã giao" khi khách nhận hàng
-8. Thanh toán tự động hoàn tất
+7. Cập nhật "Đã giao" khi khách nhận hàng, thanh toán hoàn tất
 ```
 
 ---
@@ -269,6 +263,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - Tồn kho: bắt buộc, số không âm
 - Thể loại: bắt buộc
 - Hãng đĩa: bắt buộc
+- Nghệ sĩ: bắt buộc
 
 ### 6.3. Đơn hàng
 - Địa chỉ giao hàng: bắt buộc
@@ -286,8 +281,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 Rill được thiết kế đơn giản với các thành phần cốt lõi:
 - ✅ Quản lý sản phẩm đĩa than
 - ✅ Giỏ hàng và đặt hàng
-- ✅ Thanh toán COD
-- ✅ Quản lý đơn hàng
+- ✅ Quản lý đơn hàng (bao gồm thanh toán COD)
 - ✅ Đánh giá sản phẩm
 - ✅ Dashboard admin
 
