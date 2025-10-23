@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+
+actor Customer
+actor Admin
+
+rectangle "Rill System" {
+  usecase "Login" as UC2
+}
+
+note right of UC2
+  **Main Flow:**
+  1. Enter email and password.
+  2. System authenticates the credentials.
+  3. A login session is created.
+  4. Redirect to the appropriate page.
+end note
+
+Customer -- UC2
+Admin -- UC2
+@enduml
