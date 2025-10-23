@@ -1,6 +1,7 @@
 @startuml "UC-1: Account & Profile Management"
+' Layout improvement for better readability
 
-left to right direction
+!theme plain
 
 actor Guest
 actor Customer
@@ -16,18 +17,22 @@ rectangle "Rill System" {
   usecase "Manage Shipping Addresses" as UC4
 }
 
-' Guest actions
-Guest -- UC1
-Guest -- UC2
+' Positioning actors
+Guest -[hidden]down-> Customer
+Admin -[hidden]down- UC2b
 
-' Customer actions
+' Guest actions are on the left
+Guest -up-> UC1
+Guest -up-> UC2
+
+' Admin actions are on the right
+Admin -up-> UC2
+Admin -up-> UC2b
+
+' Customer actions are in the center
 Customer -- UC2b
 Customer -- UC3
 Customer -- UC4
-
-' Admin actions
-Admin -- UC2
-Admin -- UC2b
 
 ' Breakdown of Manage Shipping Addresses
 UC4 .> (Add New Address) : <<include>>
@@ -36,8 +41,8 @@ UC4 .> (Delete Address) : <<include>>
 UC4 .> (Set as Default) : <<include>>
 
 note "Requires authentication" as N1
-(UC2b) .. N1
-(UC3) .. N1
-(UC4) .. N1
+UC3 .. N1
+UC4 .. N1
+UC2b .. N1
 
 @enduml
