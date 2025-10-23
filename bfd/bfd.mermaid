@@ -1,0 +1,46 @@
+---
+config:
+  theme: base
+  look: classic
+---
+graph TD
+    A[Rill - Online Vinyl Store]
+    subgraph "Account Management"
+        B1["Register Account (Guest)"]
+        B2["Login (Customer, Admin)"]
+        B3["Logout (Customer, Admin)"]
+        B4["Manage Shipping Addresses (Customer)"]
+    end
+    subgraph "Product & Catalog Management"
+        C1["Browse & Search Products (All)"]
+        C2["Manage Products & Artists (Admin)"]
+    end
+    subgraph "Sales & Checkout"
+        D1["Manage Shopping Cart (Customer)"]
+        D2["Place Order (Customer)"]
+    end
+    subgraph "Order Fulfillment & Post-Sale"
+        E1["Process Order (Admin)"]
+        E2["Cancel Order (Customer, Admin)"]
+        E3["Review Product (Customer)"]
+    end
+    subgraph "Administration"
+        F1["Manage Customers (Admin)"]
+    end
+    A --> B["Account Management"]
+    A --> C["Product & Catalog Management"]
+    A --> D["Sales & Checkout"]
+    A --> E["Order Fulfillment & Post-Sale"]
+    A --> F["Administration"]
+    B --> B1
+    B --> B2
+    B --> B3
+    B --> B4
+    C --> C1
+    C --> C2
+    D --> D1
+    D --> D2
+    E --> E1
+    E --> E2
+    E --> E3
+    F --> F1
