@@ -1,0 +1,43 @@
+@startuml "UC-2: Customer Shopping Flow"
+
+left to right direction
+
+actor Customer
+
+rectangle "Rill System" {
+  usecase "Browse & Search Products" as UC4
+  usecase "Manage Shopping Cart" as UC7
+  usecase "Place Order" as UC8
+  usecase "Cancel Order" as UC11
+  usecase "Review Product" as UC12
+}
+
+Customer -- UC4
+Customer -- UC7
+Customer -- UC8
+Customer -- UC11
+Customer -- UC12
+
+' Breakdown of Manage Shopping Cart
+UC7 .> (Add Item) : <<include>>
+UC7 .> (Update Quantity) : <<include>>
+UC7 .> (Remove Item) : <<include>>
+
+' Breakdown of Place Order
+UC8 .> (Select Shipping Address) : <<include>>
+UC8 .> (Perform Stock Check) : <<include>>
+UC8 .> (Clear Cart) : <<include>>
+
+' Order cancellation is an option for pending orders
+UC8 ..> UC11 : <<extend>>
+
+' A customer can only review a product after the order is delivered
+(UC12) .> (Verify Order Status is 'Delivered') : <<include>>
+
+note "All use cases require authentication" as N1
+UC7 .. N1
+UC8 .. N1
+UC11 .. N1
+UC12 .. N1
+
+@enduml
