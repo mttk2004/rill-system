@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+
+actor Customer
+
+rectangle "Rill System" {
+  usecase "Manage Shipping Addresses" as UC3
+}
+
+note right of UC3
+  **Main Flow:**
+  1. Access the address management page.
+  2. View the list of existing addresses.
+  3. Add/edit/delete an address.
+  4. Set one address as the default.
+end note
+
+Customer -- UC3
+@enduml
