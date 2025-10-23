@@ -195,6 +195,100 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
 
 ---
 
-## 4. Business Rules Summary
+## 4. Overall Business Rules
 
-... (The rest of the file remains the same, as it's already mostly in English-friendly terms or technical descriptions)
+### 4.1. Product Rules
+- Each product must have one main artist.
+- Stock quantity cannot be negative.
+- Sale price must be less than the original price.
+
+### 4.2. Order Rules
+- An order can only be cancelled from the "Pending Confirmation" status (by Admin or Customer).
+- Stock is only decremented when an order is confirmed by an Admin.
+- The shipping address is saved to the order at the time of purchase.
+- The default payment method is COD, and payment status is managed within the order.
+
+### 4.3. Cart Rules
+- Stock is checked at the time of checkout.
+- A customer can only have one shopping cart.
+- The quantity updated in the cart cannot exceed the available stock.
+
+### 4.4. User Rules
+- Roles are limited to "admin" or "customer".
+- Email must be unique.
+- Only one address can be set as the default per user.
+
+### 4.5. Review Rules
+- A customer can only review a product they have successfully purchased and received.
+- Each order item can be reviewed only once.
+
+---
+
+## 5. Main Business Flows
+
+### 5.1. Customer Purchase Flow
+```
+1. Log in to the system.
+2. Browse the product list → Filter/Search.
+3. View product details.
+4. Add products to the cart → Update quantities.
+5. Go to the cart → Proceed to checkout.
+6. Select a shipping address → Confirm information.
+7. Place the order (COD).
+8. Wait for admin confirmation (Can self-cancel during this stage).
+9. Receive the package.
+10. Review the purchased products.
+```
+
+### 5.2. Admin Order Processing Flow
+```
+1. Log in to the admin dashboard.
+2. View the list of orders pending confirmation.
+3. Select an order to view details.
+4. Check customer info & stock.
+5. Decide:
+   - CONFIRM → Decrement stock, update status (Show error if out of stock).
+   - CANCEL → Do not change stock, update status.
+6. Update to "Shipping" when handed to the shipper.
+7. Update to "Delivered" when the customer receives the package, payment is completed.
+```
+
+---
+
+## 6. Data Validation Rules
+
+### 6.1. User
+- Email: required, valid email format, unique.
+- Password: required.
+- Phone Number: required.
+- Full Name: required.
+
+### 6.2. Product
+- Name: required.
+- Price: required, positive number.
+- Stock: required, non-negative number.
+- Genre: required.
+- Label: required.
+- Artist: required.
+
+### 6.3. Order
+- Shipping Address: required.
+- Total Amount: calculated field.
+- Status: ENUM ('Pending Confirmation', 'Confirmed', 'Shipping', 'Delivered', 'Cancelled').
+
+### 6.4. Review
+- Rating: required, integer from 1 to 5.
+- Comment: optional.
+
+---
+
+## 7. System Summary
+
+Rill is designed with the following core components:
+- ✅ Vinyl Product Management
+- ✅ Shopping Cart and Ordering
+- ✅ Order Management (including COD payment)
+- ✅ Product Reviews
+- ✅ Admin Dashboard
+
+**Objective**: A simple and understandable system to serve as a basis for UML analysis and design.
