@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+actor Customer
+actor Admin
+
+rectangle "Rill System" {
+  usecase "Logout" as UC2b
+}
+
+note right of UC2b
+  **Main Flow:**
+  1. The user clicks the "Logout" button.
+  2. The system destroys the current session.
+  3. Redirect to the homepage.
+end note
+
+Customer -- UC2b
+Admin -- UC2b
+@enduml
