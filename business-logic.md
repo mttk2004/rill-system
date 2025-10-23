@@ -65,6 +65,13 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
   3. A login session is created.
   4. Redirect to the homepage (Customer) or Dashboard (Admin).
 
+#### UC-02b: Logout
+- **Actor**: Customer, Admin
+- **Main Flow**:
+  1. The user clicks the "Logout" button.
+  2. The system destroys the current session.
+  3. Redirect to the homepage.
+
 #### UC-03: Manage Shipping Addresses
 - **Actor**: Customer
 - **Main Flow**:
