@@ -1,24 +1,38 @@
 @startuml "UC-3: Admin Functions"
+' Layout improvement for better organization
 
-top to bottom direction
+!theme plain
 
 actor Admin
 
 rectangle "Rill System" {
-  usecase "Manage Products" as UC6
-  usecase "Manage Artists" as UC6b
-  usecase "Process Order" as UC9
-  usecase "Update Shipping Status" as UC10
-  usecase "Cancel Order" as UC11
-  usecase "Manage Customer Info" as UC13
+
+  package "Catalog Management" {
+    usecase "Manage Products" as UC6
+    usecase "Manage Artists" as UC6b
+  }
+
+  package "Order Fulfillment" {
+    usecase "Process Order" as UC9
+    usecase "Update Shipping Status" as UC10
+    usecase "Cancel Order" as UC11
+  }
+
+  package "User Management" {
+    usecase "Manage Customer Info" as UC13
+  }
 }
 
-Admin -- UC6
-Admin -- UC6b
-Admin -- UC9
-Admin -- UC10
-Admin -- UC11
-Admin -- UC13
+' Positioning and relationships
+Admin -down-> UC6
+Admin -down-> UC6b
+Admin -down-> UC9
+Admin -down-> UC10
+Admin -down-> UC11
+Admin -down-> UC13
+
+' Logical flow in Order Fulfillment
+UC9 .right.> UC10 : <<extend>>
 
 ' Breakdown of Product Management
 UC6 .> (Add Product) : <<include>>
@@ -30,15 +44,9 @@ UC6b .> (Add Artist) : <<include>>
 UC6b .> (Edit Artist) : <<include>>
 UC6b .> (Delete Artist) : <<include>>
 
-' Order Processing Flow
-UC9 ..> UC10 : <<extend>>
-
 note "All use cases require admin authentication" as N1
 UC6 .. N1
-UC6b .. N1
 UC9 .. N1
-UC10 .. N1
-UC11 .. N1
 UC13 .. N1
 
 @enduml

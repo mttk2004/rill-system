@@ -1,6 +1,7 @@
 @startuml "UC-2: Customer Shopping Flow"
+' Layout improvement for a clear, top-to-bottom flow
 
-left to right direction
+!theme plain
 
 actor Customer
 
@@ -12,11 +13,12 @@ rectangle "Rill System" {
   usecase "Review Product" as UC12
 }
 
-Customer -- UC4
-Customer -- UC7
-Customer -- UC8
-Customer -- UC11
-Customer -- UC12
+' Arrange use cases in a logical top-to-bottom flow
+Customer --> UC4
+UC4 -down-> UC7
+UC7 -down-> UC8
+UC8 -left-> UC11 : <<extend>>\n(If order is pending)
+UC8 -down-> UC12
 
 ' Breakdown of Manage Shopping Cart
 UC7 .> (Add Item) : <<include>>
@@ -27,9 +29,6 @@ UC7 .> (Remove Item) : <<include>>
 UC8 .> (Select Shipping Address) : <<include>>
 UC8 .> (Perform Stock Check) : <<include>>
 UC8 .> (Clear Cart) : <<include>>
-
-' Order cancellation is an option for pending orders
-UC8 ..> UC11 : <<extend>>
 
 ' A customer can only review a product after the order is delivered
 (UC12) .> (Verify Order Status is 'Delivered') : <<include>>
