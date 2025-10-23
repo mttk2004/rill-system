@@ -53,9 +53,9 @@ Hệ thống Rill bao gồm 9 class chính được chia thành các nhóm:
 - `isDefault: boolean`
 
 **Methods**:
-- `+create(user: User, addressInfo: map): Address`
+- `+create(user: User, fullName: string, phone: string, address: string, city: string, district: string, ward: string): Address`
 - `+setAsDefault(): void`
-- `+update(addressInfo: map): void`
+- `+update(fullName: string, phone: string, address: string, city: string, district: string, ward: string): void`
 
 **Relationships**:
 - Nhiều Address thuộc về 1 User (n:1)
@@ -102,7 +102,6 @@ Hệ thống Rill bao gồm 9 class chính được chia thành các nhóm:
 - `+decreaseStock(quantity: int): boolean`
 - `+getCurrentPrice(): decimal`
 - `+isInStock(quantity: int): boolean`
-- `+findTopSellingProducts(limit: int): Product[]`
 
 **Relationships**:
 - Nhiều Product thuộc về 1 Artist (n:1)
@@ -175,7 +174,6 @@ Hệ thống Rill bao gồm 9 class chính được chia thành các nhóm:
 - `+cancel(): void`
 - `+ship(): void`
 - `+deliver(): void`
-- `+calculateTotalRevenue(): decimal`
 
 **Relationships**:
 - Nhiều Order thuộc về 1 User (n:1)
@@ -265,6 +263,10 @@ Artist (1) ←→ (n) Product
 - `Order.totalAmount` = subtotal + shippingFee
 - `CartItem.subtotal` = quantity * product.getCurrentPrice()
 - `OrderItem.subtotal` = quantity * productPrice
+
+### 5.3. Ghi chú về Tầng Logic
+- Các phương thức có chức năng thống kê hoặc truy vấn trên toàn bộ tập hợp đối tượng (ví dụ: `findTopSellingProducts`, `calculateTotalRevenue`) đã được lược bỏ khỏi các class entity (`Product`, `Order`).
+- Trong một mô hình thực tế, các phương thức này sẽ thuộc về các lớp quản lý (Service/Manager/Repository classes) ở tầng logic nghiệp vụ, nhằm đảm bảo nguyên tắc đơn trách nhiệm (Single Responsibility Principle).
 
 ---
 
