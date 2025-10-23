@@ -187,6 +187,31 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   - Chỉ được đánh giá các sản phẩm trong đơn hàng đã giao thành công.
   - Mỗi sản phẩm trong một đơn hàng (mỗi order item) chỉ được đánh giá một lần.
 
+#### UC-11: Hủy đơn hàng (Customer)
+- **Actor**: Customer
+- **Luồng chính**:
+  1. Customer truy cập trang "Lịch sử đơn hàng".
+  2. Chọn đơn hàng đang ở trạng thái "Chờ xác nhận".
+  3. Nhấn nút "Hủy đơn hàng".
+  4. Hệ thống xác nhận và chuyển trạng thái đơn hàng thành "Đã hủy".
+- **Quy tắc nghiệp vụ**:
+  - Khách hàng chỉ có thể hủy đơn hàng khi trạng thái là "Chờ xác nhận".
+
+---
+
+### 3.5. Đánh giá sản phẩm
+#### UC-12: Đánh giá sản phẩm
+- **Actor**: Customer
+- **Luồng chính**:
+  1. Customer truy cập trang "Lịch sử đơn hàng".
+  2. Chọn đơn hàng đã ở trạng thái "Đã giao".
+  3. Chọn một sản phẩm trong đơn hàng chưa được đánh giá.
+  4. Nhập điểm đánh giá (1-5 sao) và bình luận.
+  5. Gửi đánh giá.
+- **Quy tắc nghiệp vụ**:
+  - Chỉ được đánh giá các sản phẩm trong đơn hàng đã giao thành công.
+  - Mỗi sản phẩm trong một đơn hàng (mỗi order item) chỉ được đánh giá một lần.
+
 ---
 
 ## 4. Quy tắc nghiệp vụ tổng hợp
