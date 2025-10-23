@@ -1,3 +1,6 @@
+@startuml
+left to right direction
+
 actor Guest
 actor Customer
 actor Admin
@@ -13,6 +16,8 @@ rectangle "Rill System" {
 Guest -- UC1
 Guest -- UC2
 
+Customer --|> Guest
+
 Customer -- UC1
 Customer -- UC3
 Customer -- UC4
@@ -20,5 +25,4 @@ Customer -- UC4
 Admin -- UC1
 Admin -- UC4
 Admin -- UC5
-
-Customer --|> Guest
+@enduml

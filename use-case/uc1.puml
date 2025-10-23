@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+actor Guest
+
+rectangle "Rill System" {
+  usecase "Register Account" as UC1
+}
+
+note right of UC1
+  **Main Flow:**
+  1. Access the registration page.
+  2. Enter information (email, password, etc.).
+  3. System validates data.
+  4. System creates a "customer" account.
+  5. Redirect to the login page.
+end note
+
+Guest -- UC1
+@enduml
