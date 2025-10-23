@@ -3,12 +3,11 @@
 
 ## 1. Tổng quan Class
 
-Hệ thống Rill bao gồm 12 class chính được chia thành các nhóm:
-- **User Management**: User, Address
+Hệ thống Rill bao gồm 11 class chính được chia thành các nhóm:
+- **User Management**: User, Address, Review
 - **Product Management**: Product, Artist, ProductArtist
 - **Order Management**: Order, OrderItem, Payment
 - **Cart Management**: Cart, CartItem
-- **Voucher Management**: Voucher, VoucherUsage
 
 ---
 
@@ -38,7 +37,7 @@ Hệ thống Rill bao gồm 12 class chính được chia thành các nhóm:
 - 1 User có nhiều Address (1:n)
 - 1 User có 1 Cart (1:1)
 - 1 User có nhiều Order (1:n)
-- 1 User có nhiều VoucherUsage (1:n)
+- 1 User có nhiều Review (1:n)
 
 ---
 
@@ -118,11 +117,13 @@ Hệ thống Rill bao gồm 12 class chính được chia thành các nhóm:
 - `+getCurrentPrice(): decimal` - Lấy giá hiện tại (ưu tiên sale price)
 - `+isInStock(quantity): boolean` - Kiểm tra còn hàng
 - `+delete(): void` - Xóa sản phẩm
+- `+findTopSellingProducts(limit: int): Product[]` - Tìm sản phẩm bán chạy
 
 **Relationships**:
 - Nhiều Product có nhiều Artist (m:n qua ProductArtist)
 - 1 Product có nhiều CartItem (1:n)
 - 1 Product có nhiều OrderItem (1:n)
+- 1 Product có nhiều Review (1:n)
 
 ---
 
@@ -205,7 +206,6 @@ Hệ thống Rill bao gồm 12 class chính được chia thành các nhóm:
 - `shippingAddress: json` - Địa chỉ giao hàng (snapshot)
 - `subtotal: decimal` - Tổng tiền hàng
 - `shippingFee: decimal` - Phí vận chuyển
-- `discountAmount: decimal` - Số tiền giảm giá
 - `totalAmount: decimal` - Tổng thanh toán
 - `notes: text` - Ghi chú đơn hàng
 - `createdAt: datetime` - Thời gian đặt hàng
@@ -220,13 +220,12 @@ Hệ thống Rill bao gồm 12 class chính được chia thành các nhóm:
 - `+deliver(): void` - Hoàn thành giao hàng
 - `+calculateTotal(): decimal` - Tính tổng tiền
 - `+canBeCancelled(): boolean` - Kiểm tra có thể hủy
-- `+applyVoucher(voucherId): void` - Áp dụng voucher
+- `+calculateTotalRevenue(): decimal` - Tính tổng doanh thu
 
 **Relationships**:
 - Nhiều Order thuộc về 1 User (n:1)
 - 1 Order có nhiều OrderItem (1:n)
 - 1 Order có 1 Payment (1:1)
-- Nhiều Order có thể dùng 1 Voucher (n:1)
 
 ---
 
@@ -278,56 +277,25 @@ Hệ thống Rill bao gồm 12 class chính được chia thành các nhóm:
 
 ---
 
-### 2.11. Voucher (Phiếu giảm giá)
-**Mục đích**: Quản lý các voucher giảm giá
+### 2.11. Review (Đánh giá)
+**Mục đích**: Quản lý đánh giá sản phẩm của khách hàng
 
 **Attributes**:
 - `id: int` - Mã định danh duy nhất
-- `code: string` - Mã voucher (unique)
-- `discountAmount: decimal` - Số tiền giảm
-- `minOrderAmount: decimal` - Giá trị đơn hàng tối thiểu
-- `usageLimit: int` - Số lần sử dụng tối đa
-- `usageCount: int` - Số lần đã sử dụng
-- `isActive: boolean` - Trạng thái kích hoạt
-- `validFrom: datetime` - Thời gian bắt đầu hiệu lực
-- `validUntil: datetime` - Thời gian hết hiệu lực
-- `createdAt: datetime` - Thời gian tạo
-- `updatedAt: datetime` - Thời gian cập nhật
-
-**Methods**:
-- `+create(voucherInfo): Voucher` - Tạo voucher mới
-- `+activate(): void` - Kích hoạt voucher
-- `+deactivate(): void` - Tắt voucher
-- `+isValid(): boolean` - Kiểm tra còn hiệu lực
-- `+canBeUsed(orderAmount, userId): boolean` - Kiểm tra có thể sử dụng
-- `+use(userId): void` - Sử dụng voucher (tăng usage_count)
-- `+getRemainingUsage(): int` - Lấy số lần còn lại
-
-**Relationships**:
-- 1 Voucher có nhiều VoucherUsage (1:n)
-- 1 Voucher có nhiều Order (1:n)
-
----
-
-### 2.12. VoucherUsage (Lịch sử sử dụng voucher)
-**Mục đích**: Theo dõi việc sử dụng voucher của từng user
-
-**Attributes**:
-- `id: int` - Mã định danh duy nhất
-- `voucherId: int` - Mã voucher (FK)
 - `userId: int` - Mã người dùng (FK)
-- `orderId: int` - Mã đơn hàng (FK)
-- `discountAmount: decimal` - Số tiền được giảm
-- `usedAt: datetime` - Thời gian sử dụng
+- `productId: int` - Mã sản phẩm (FK)
+- `rating: int` - Điểm đánh giá (1-5)
+- `comment: text` - Nội dung bình luận
+- `createdAt: datetime` - Thời gian tạo
 
 **Methods**:
-- `+create(voucherId, userId, orderId, discountAmount): VoucherUsage` - Ghi nhận sử dụng
-- `+getUserUsageCount(userId, voucherId): int` - Đếm số lần user đã dùng voucher
+- `+create(userId, productId, rating, comment): Review` - Tạo đánh giá mới
+- `+update(rating, comment): void` - Cập nhật đánh giá
+- `+delete(): void` - Xóa đánh giá
 
 **Relationships**:
-- Nhiều VoucherUsage thuộc về 1 Voucher (n:1)
-- Nhiều VoucherUsage thuộc về 1 User (n:1)
-- Nhiều VoucherUsage thuộc về 1 Order (n:1)
+- Nhiều Review thuộc về 1 User (n:1)
+- Nhiều Review thuộc về 1 Product (n:1)
 
 ---
 
@@ -337,10 +305,9 @@ Hệ thống Rill bao gồm 12 class chính được chia thành các nhóm:
 ```
 User (1) ←→ (1) Cart ←→ (n) CartItem ←→ (1) Product
 User (1) ←→ (n) Address
+User (1) ←→ (n) Review ←→ (1) Product
 User (1) ←→ (n) Order ←→ (n) OrderItem ←→ (1) Product
-User (1) ←→ (n) VoucherUsage ←→ (1) Voucher
 Order (1) ←→ (1) Payment
-Order (n) ←→ (1) Voucher
 Product (n) ←→ (n) Artist (qua ProductArtist)
 ```
 
@@ -348,11 +315,12 @@ Product (n) ←→ (n) Artist (qua ProductArtist)
 - **User - Cart**: 1:1 (mỗi user có 1 giỏ hàng)
 - **User - Address**: 1:n (user có nhiều địa chỉ)
 - **User - Order**: 1:n (user có nhiều đơn hàng)
+- **User - Review**: 1:n (user có nhiều đánh giá)
 - **Cart - CartItem**: 1:n (giỏ hàng có nhiều item)
 - **Order - OrderItem**: 1:n (đơn hàng có nhiều item)
 - **Product - Artist**: n:m (sản phẩm có nhiều nghệ sĩ, nghệ sĩ có nhiều sản phẩm)
+- **Product - Review**: 1:n (sản phẩm có nhiều đánh giá)
 - **Order - Payment**: 1:1 (đơn hàng có 1 thanh toán)
-- **Voucher - VoucherUsage**: 1:n (voucher được dùng nhiều lần)
 
 ---
 
@@ -413,21 +381,19 @@ enum ArtistRole {
 - **Inheritance**: Không sử dụng kế thừa để đơn giản hóa
 - **Composition vs Aggregation**:
   - Composition: Order-OrderItem, Cart-CartItem
-  - Aggregation: User-Address, User-Order
+  - Aggregation: User-Address, User-Order, User-Review
 
 ### 5.2. Key Constraints
 - Email trong User phải unique
-- Voucher code phải unique
 - Order number phải unique
 - Chỉ 1 Address có thể là default per User
 - Stock quantity không được âm
 - Sale price phải nhỏ hơn regular price
 
 ### 5.3. Derived Attributes
-- `Order.totalAmount` = subtotal + shippingFee - discountAmount
+- `Order.totalAmount` = subtotal + shippingFee
 - `CartItem.subtotal` = quantity * product.getCurrentPrice()
 - `OrderItem.subtotal` = quantity * productPrice
-- `Voucher.remainingUsage` = usageLimit - usageCount
 
 ---
 

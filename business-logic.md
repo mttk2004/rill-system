@@ -10,7 +10,6 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - **Thanh toán**: Chỉ hỗ trợ COD (Cash on Delivery)
 - **Vai trò người dùng**: Admin và Customer (2 vai trò)
 - **Quản lý tồn kho**: Kiểm tra stock real-time tại checkout
-- **Voucher**: Hỗ trợ giảm giá cố định (fixed amount)
 
 ---
 
@@ -24,7 +23,6 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   - Đặt hàng và thanh toán COD
   - Quản lý địa chỉ giao hàng
   - Xem lịch sử đơn hàng
-  - Sử dụng voucher giảm giá
   - Cập nhật thông tin cá nhân
   - Đánh giá sản phẩm đã mua
 
@@ -34,7 +32,6 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   - Quản lý sản phẩm (thêm, sửa, xóa)
   - Quản lý nghệ sĩ (thêm, sửa, xóa)
   - Quản lý đơn hàng (xác nhận, hủy, cập nhật trạng thái)
-  - Quản lý voucher (tạo, chỉnh sửa, kích hoạt/tắt)
   - Xem dashboard và thống kê
   - Quản lý thông tin khách hàng
 
@@ -122,13 +119,11 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - **Luồng chính**:
   1. Customer nhấn "Thanh toán"
   2. Chọn địa chỉ giao hàng
-  3. Áp dụng voucher giảm giá (tùy chọn)
-  4. Kiểm tra tồn kho real-time
-  5. Tạo đơn hàng với trạng thái "Chờ xác nhận"
-  6. Lưu địa chỉ giao hàng vào đơn hàng
-  7. Xóa sản phẩm khỏi giỏ hàng
+  3. Kiểm tra tồn kho real-time
+  4. Tạo đơn hàng với trạng thái "Chờ xác nhận"
+  5. Lưu địa chỉ giao hàng vào đơn hàng
+  6. Xóa sản phẩm khỏi giỏ hàng
 - **Quy tắc nghiệp vụ**:
-  - Voucher được đánh dấu "đã sử dụng" khi đặt hàng
   - Tồn kho chưa bị trừ tại thời điểm đặt hàng
 
 ---
@@ -162,36 +157,6 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   - "Đã xác nhận" → "Đang giao": Khi giao cho shipper
   - "Đang giao" → "Đã giao": Khi khách nhận hàng
   - "Đã giao": Thanh toán hoàn tất
-
----
-
-### 3.5. Voucher
-#### UC-11: Sử dụng voucher
-- **Actor**: Customer
-- **Luồng chính**:
-  1. Nhập mã voucher tại trang thanh toán
-  2. Hệ thống kiểm tra:
-     - Mã voucher có tồn tại
-     - Voucher đang được kích hoạt
-     - Trong thời gian hiệu lực
-     - Chưa hết lượt sử dụng
-     - Đơn hàng đạt giá trị tối thiểu
-     - Khách hàng chưa sử dụng voucher này
-  3. Áp dụng giảm giá (số tiền cố định)
-  4. Hiển thị giá sau giảm
-  5. Đánh dấu voucher đã sử dụng khi đặt hàng
-- **Quy tắc nghiệp vụ**:
-  - Chỉ hỗ trợ giảm giá số tiền cố định
-  - Một đơn hàng chỉ dùng được 1 voucher
-
-#### UC-12: Quản lý voucher (Admin)
-- **Actor**: Admin
-- **Chức năng**:
-  - Tạo voucher mới
-  - Thiết lập: mã voucher, số tiền giảm, giá trị đơn hàng tối thiểu, số lần sử dụng
-  - Thiết lập thời gian hiệu lực
-  - Kích hoạt/tắt voucher
-  - Xem thống kê sử dụng
 
 ---
 
@@ -235,7 +200,6 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 5. Vào giỏ hàng → Cập nhật số lượng
 6. Thanh toán:
    - Chọn/thêm địa chỉ giao hàng
-   - Áp dụng voucher (tùy chọn)
    - Xác nhận thông tin đơn hàng
 7. Đặt hàng (COD)
 8. Chờ admin xác nhận
@@ -278,13 +242,6 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - Tổng đơn hàng: trường tính toán
 - Trạng thái: ENUM ('Chờ xác nhận', 'Đã xác nhận', 'Đang giao', 'Đã giao', 'Đã hủy')
 
-### 6.4. Voucher
-- Mã: bắt buộc, duy nhất
-- Số tiền giảm: bắt buộc, số dương
-- Giá trị đơn hàng tối thiểu: bắt buộc
-- Số lần sử dụng: bắt buộc
-- Thời gian hiệu lực: bắt buộc
-
 ---
 
 ## 7. Tóm tắt hệ thống
@@ -294,7 +251,6 @@ Rill được thiết kế đơn giản với các thành phần cốt lõi:
 - ✅ Giỏ hàng và đặt hàng
 - ✅ Thanh toán COD
 - ✅ Quản lý đơn hàng
-- ✅ Hệ thống voucher
 - ✅ Dashboard admin
 
 **Mục tiêu**: Hệ thống đơn giản, dễ hiểu để phục vụ việc phân tích và thiết kế UML.
