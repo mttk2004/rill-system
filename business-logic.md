@@ -21,6 +21,7 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   - Xem danh sách và chi tiết sản phẩm
   - Thêm/xóa/sửa sản phẩm vào giỏ hàng
   - Đặt hàng và thanh toán COD
+  - Hủy đơn hàng của chính mình
   - Quản lý địa chỉ giao hàng
   - Xem lịch sử đơn hàng
   - Cập nhật thông tin cá nhân
@@ -113,13 +114,14 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   4. Xem tổng giá trị giỏ hàng
 - **Quy tắc nghiệp vụ**:
   - Một khách hàng chỉ có một giỏ hàng
+  - Số lượng sản phẩm trong giỏ hàng không được vượt quá tồn kho.
 
 #### UC-08: Đặt hàng
 - **Actor**: Customer
 - **Luồng chính**:
   1. Customer nhấn "Thanh toán"
   2. Chọn địa chỉ giao hàng
-  3. Kiểm tra tồn kho real-time
+  3. Kiểm tra tồn kho real-time (nếu có sản phẩm hết hàng, báo lỗi)
   4. Tạo đơn hàng với trạng thái "Chờ xác nhận"
   5. Lưu địa chỉ giao hàng vào đơn hàng
   6. Xóa sản phẩm khỏi giỏ hàng
@@ -132,18 +134,22 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 #### UC-09: Xử lý đơn hàng (Admin)
 - **Actor**: Admin
 - **Luồng xác nhận đơn hàng**:
-  1. Admin xem danh sách đơn hàng chờ xác nhận
-  2. Chọn đơn hàng để xem chi tiết
-  3. Kiểm tra thông tin khách hàng và tồn kho
+  1. Admin xem danh sách đơn hàng chờ xác nhận.
+  2. Chọn đơn hàng để xem chi tiết.
+  3. Kiểm tra thông tin khách hàng và tồn kho sản phẩm.
   4. Xác nhận đơn hàng:
      - Trạng thái: "Chờ xác nhận" → "Đã xác nhận"
      - Trừ số lượng tồn kho
      - Ghi nhận lịch sử trạng thái
-- **Luồng hủy đơn hàng**:
-  1. Admin chọn "Hủy đơn hàng"
-  2. Nhập lý do hủy
-  3. Trạng thái: "Chờ xác nhận" → "Đã hủy"
-  4. Không trừ tồn kho
+- **Luồng hủy đơn hàng (Admin)**:
+  1. Admin chọn "Hủy đơn hàng".
+  2. Nhập lý do hủy.
+  3. Trạng thái: "Chờ xác nhận" → "Đã hủy".
+  4. Không trừ tồn kho.
+- **Luồng ngoại lệ (Exception Flow)**:
+  1. Khi Admin xác nhận, hệ thống kiểm tra lại tồn kho lần cuối.
+  2. Nếu có sản phẩm hết hàng, hệ thống báo lỗi và không cho phép xác nhận.
+  3. Admin phải hủy đơn hàng hoặc liên hệ khách hàng để xử lý.
 
 #### UC-10: Cập nhật trạng thái giao hàng
 - **Actor**: Admin
@@ -151,12 +157,37 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
   ```
   Chờ xác nhận → Đã xác nhận → Đang giao → Đã giao
        ↓
-    Đã hủy (chỉ từ "Chờ xác nhận")
+    Đã hủy (từ "Chờ xác nhận", bởi Admin hoặc Customer)
   ```
 - **Quy tắc**:
   - "Đã xác nhận" → "Đang giao": Khi giao cho shipper
   - "Đang giao" → "Đã giao": Khi khách nhận hàng
   - "Đã giao": Thanh toán hoàn tất
+
+#### UC-11: Hủy đơn hàng (Customer)
+- **Actor**: Customer
+- **Luồng chính**:
+  1. Customer truy cập trang "Lịch sử đơn hàng".
+  2. Chọn đơn hàng đang ở trạng thái "Chờ xác nhận".
+  3. Nhấn nút "Hủy đơn hàng".
+  4. Hệ thống xác nhận và chuyển trạng thái đơn hàng thành "Đã hủy".
+- **Quy tắc nghiệp vụ**:
+  - Khách hàng chỉ có thể hủy đơn hàng khi trạng thái là "Chờ xác nhận".
+
+---
+
+### 3.5. Đánh giá sản phẩm
+#### UC-12: Đánh giá sản phẩm
+- **Actor**: Customer
+- **Luồng chính**:
+  1. Customer truy cập trang "Lịch sử đơn hàng".
+  2. Chọn đơn hàng đã ở trạng thái "Đã giao".
+  3. Chọn một sản phẩm trong đơn hàng chưa được đánh giá.
+  4. Nhập điểm đánh giá (1-5 sao) và bình luận.
+  5. Gửi đánh giá.
+- **Quy tắc nghiệp vụ**:
+  - Chỉ được đánh giá các sản phẩm trong đơn hàng đã giao thành công.
+  - Mỗi sản phẩm trong một đơn hàng (mỗi order item) chỉ được đánh giá một lần.
 
 ---
 
@@ -168,24 +199,27 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - Giá khuyến mãi phải nhỏ hơn giá gốc
 
 ### 4.2. Quy tắc đơn hàng
-- Đơn hàng chỉ có thể hủy từ trạng thái "Chờ xác nhận"
-- Tồn kho chỉ bị trừ khi đơn hàng được xác nhận
-- Địa chỉ giao hàng được lưu vào đơn hàng
-- Phương thức thanh toán chỉ có COD
+- Đơn hàng chỉ có thể bị hủy từ trạng thái "Chờ xác nhận" (bởi Admin hoặc Customer).
+- Tồn kho chỉ bị trừ khi đơn hàng được Admin xác nhận.
+- Địa chỉ giao hàng được lưu vào đơn hàng tại thời điểm đặt hàng.
 
 ### 4.3. Quy tắc giỏ hàng
-- Kiểm tra tồn kho tại thời điểm thanh toán
-- Một khách hàng chỉ có một giỏ hàng
+- Kiểm tra tồn kho tại thời điểm thanh toán.
+- Một khách hàng chỉ có một giỏ hàng.
+- Số lượng cập nhật trong giỏ hàng không được vượt tồn kho.
 
 ### 4.4. Quy tắc người dùng
-- Vai trò chỉ có 2 loại: "admin" hoặc "customer"
-- Email phải duy nhất
-- Chỉ 1 địa chỉ có thể là mặc định
+- Vai trò chỉ có 2 loại: "admin" hoặc "customer".
+- Email phải duy nhất.
+- Chỉ 1 địa chỉ có thể là mặc định.
 
 ### 4.5. Quy tắc thanh toán
-- Chỉ hỗ trợ thanh toán COD
-- Trạng thái thanh toán: chờ → hoàn tất (khi giao xong)
-- Trạng thái thanh toán: chờ → hủy (nếu đơn hàng bị hủy)
+- Chỉ hỗ trợ thanh toán COD.
+- Trạng thái thanh toán liên kết với trạng thái đơn hàng.
+
+### 4.6. Quy tắc đánh giá
+- Khách hàng chỉ được đánh giá sản phẩm họ đã mua và nhận hàng thành công.
+- Mỗi mục sản phẩm trong đơn hàng chỉ được đánh giá một lần duy nhất.
 
 ---
 
@@ -196,14 +230,13 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 1. Đăng nhập hệ thống
 2. Duyệt danh sách sản phẩm → Lọc/Tìm kiếm
 3. Xem chi tiết sản phẩm
-4. Thêm vào giỏ hàng (nhiều sản phẩm)
-5. Vào giỏ hàng → Cập nhật số lượng
-6. Thanh toán:
-   - Chọn/thêm địa chỉ giao hàng
-   - Xác nhận thông tin đơn hàng
+4. Thêm vào giỏ hàng → Cập nhật số lượng
+5. Vào giỏ hàng → Thanh toán
+6. Chọn địa chỉ giao hàng → Xác nhận thông tin
 7. Đặt hàng (COD)
-8. Chờ admin xác nhận
+8. Chờ admin xác nhận (Có thể tự hủy trong giai đoạn này)
 9. Nhận hàng
+10. Đánh giá sản phẩm đã mua
 ```
 
 ### 5.2. Luồng xử lý đơn hàng của admin
@@ -211,9 +244,9 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 1. Đăng nhập dashboard admin
 2. Xem danh sách đơn hàng chờ xác nhận
 3. Chọn đơn hàng để xem chi tiết
-4. Kiểm tra thông tin khách hàng & tồn kho
+4. Kiểm tra thông tin & tồn kho
 5. Quyết định:
-   - XÁC NHẬN → Trừ tồn kho, cập nhật trạng thái
+   - XÁC NHẬN → Trừ tồn kho, cập nhật trạng thái (Báo lỗi nếu hết hàng)
    - HỦY → Không thay đổi tồn kho, cập nhật trạng thái
 6. Cập nhật "Đang giao" khi giao cho shipper
 7. Cập nhật "Đã giao" khi khách nhận hàng
@@ -242,6 +275,10 @@ Rill là hệ thống thương mại điện tử chuyên bán đĩa than (vinyl
 - Tổng đơn hàng: trường tính toán
 - Trạng thái: ENUM ('Chờ xác nhận', 'Đã xác nhận', 'Đang giao', 'Đã giao', 'Đã hủy')
 
+### 6.4. Đánh giá
+- Rating: bắt buộc, số nguyên từ 1 đến 5
+- Comment: tùy chọn
+
 ---
 
 ## 7. Tóm tắt hệ thống
@@ -251,6 +288,7 @@ Rill được thiết kế đơn giản với các thành phần cốt lõi:
 - ✅ Giỏ hàng và đặt hàng
 - ✅ Thanh toán COD
 - ✅ Quản lý đơn hàng
+- ✅ Đánh giá sản phẩm
 - ✅ Dashboard admin
 
 **Mục tiêu**: Hệ thống đơn giản, dễ hiểu để phục vụ việc phân tích và thiết kế UML.
