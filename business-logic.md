@@ -9,7 +9,7 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
 ### 1.2. System Scope (Simplified for Analysis)
 - **Payment**: Only supports COD (Cash on Delivery), payment information is managed within the order.
 - **User Roles**: Admin and Customer (2 roles).
-- **Inventory Management**: Real-time stock check at checkout.
+- **Inventory Management**: A single, definitive stock check occurs at the moment of placing an order.
 - **Artists**: Each product is associated with one main artist.
 
 ---
@@ -119,16 +119,15 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
   2. Update the quantity of a product.
   3. Remove a product from the cart.
   4. View the total value of the cart.
-- **Business Rules**:
+- **Business Rule**:
   - A customer has only one shopping cart.
-  - The quantity of a product in the cart cannot exceed the available stock.
 
 #### UC-08: Place Order
 - **Actor**: Customer
 - **Main Flow**:
   1. The customer proceeds to checkout.
   2. Select a shipping address.
-  3. The system performs a real-time stock check (shows an error if a product is out of stock).
+  3. The system performs a definitive real-time stock check. If a product is out of stock, it shows an error and stops the process.
   4. Create an order with the status "Pending Confirmation".
   5. Save the shipping address and payment information (COD) to the order.
   6. Clear the products from the shopping cart.
@@ -140,43 +139,36 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
 ### 3.4. Order Management
 #### UC-09: Process Order (Admin)
 - **Actor**: Admin
-- **Confirmation Flow**:
+- **Main Flow**:
   1. The admin views the list of orders pending confirmation.
   2. Select an order to view its details.
-  3. Check customer information and product stock.
-  4. Confirm the order:
+  3. Confirm the order:
      - Status: "Pending Confirmation" → "Confirmed"
      - Decrement stock quantity.
-- **Cancellation Flow (Admin)**:
-  1. The admin selects "Cancel Order".
-  2. Enter a reason for cancellation.
-  3. Status: "Pending Confirmation" → "Cancelled".
-- **Exception Flow**:
-  1. When the admin confirms, the system performs a final stock check.
-  2. If a product is out of stock, the system shows an error and prevents confirmation.
-  3. The admin must either cancel the order or contact the customer.
 
 #### UC-10: Update Shipping Status
 - **Actor**: Admin
+- **Main Flow**:
+  1. The admin updates the order status from "Confirmed" to "Shipping".
+  2. The admin later updates the status from "Shipping" to "Delivered".
 - **Order Status Flow**:
   ```
   Pending Confirmation → Confirmed → Shipping → Delivered
            ↓
-        Cancelled (from "Pending Confirmation", by Admin or Customer)
+        Cancelled
   ```
 - **Rules**:
-  - "Confirmed" → "Shipping": When the package is handed over to the shipper.
-  - "Shipping" → "Delivered": When the customer receives the package. The order's payment status is automatically updated to "Completed".
+  - "Shipping" is set when the package is handed over to the shipper.
+  - "Delivered" is set when the customer receives the package. The order's payment status automatically updates to "Completed".
 
-#### UC-11: Cancel Order (Customer)
-- **Actor**: Customer
+#### UC-11: Cancel Order
+- **Actor**: Customer, Admin
 - **Main Flow**:
-  1. The customer accesses the "Order History" page.
-  2. Select an order with the status "Pending Confirmation".
-  3. Click the "Cancel Order" button.
-  4. The system confirms and changes the order status to "Cancelled".
+  1. The user (Customer or Admin) accesses an order with "Pending Confirmation" status.
+  2. The user initiates the cancellation.
+  3. The system changes the order status to "Cancelled".
 - **Business Rule**:
-  - A customer can only cancel an order if its status is "Pending Confirmation".
+  - An order can only be cancelled if its status is "Pending Confirmation".
 
 ---
 
@@ -203,15 +195,14 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
 - Sale price must be less than the original price.
 
 ### 4.2. Order Rules
-- An order can only be cancelled from the "Pending Confirmation" status (by Admin or Customer).
+- An order can only be cancelled from the "Pending Confirmation" status.
 - Stock is only decremented when an order is confirmed by an Admin.
 - The shipping address is saved to the order at the time of purchase.
 - The default payment method is COD, and payment status is managed within the order.
 
 ### 4.3. Cart Rules
-- Stock is checked at the time of checkout.
+- Stock is checked definitively at the time of checkout.
 - A customer can only have one shopping cart.
-- The quantity updated in the cart cannot exceed the available stock.
 
 ### 4.4. User Rules
 - Roles are limited to "admin" or "customer".
@@ -231,8 +222,8 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
 1. Log in to the system.
 2. Browse the product list → Filter/Search.
 3. View product details.
-4. Add products to the cart → Update quantities.
-5. Go to the cart → Proceed to checkout.
+4. Add products to the cart.
+5. Proceed to checkout.
 6. Select a shipping address → Confirm information.
 7. Place the order (COD).
 8. Wait for admin confirmation (Can self-cancel during this stage).
@@ -245,12 +236,11 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
 1. Log in to the admin dashboard.
 2. View the list of orders pending confirmation.
 3. Select an order to view details.
-4. Check customer info & stock.
-5. Decide:
-   - CONFIRM → Decrement stock, update status (Show error if out of stock).
-   - CANCEL → Do not change stock, update status.
-6. Update to "Shipping" when handed to the shipper.
-7. Update to "Delivered" when the customer receives the package, payment is completed.
+4. Decide:
+   - CONFIRM → Decrement stock, update status.
+   - CANCEL → Update status.
+5. Update to "Shipping".
+6. Update to "Delivered".
 ```
 
 ---

@@ -171,9 +171,8 @@ Hệ thống Rill bao gồm 9 class chính được chia thành các nhóm:
 
 **Methods**:
 - `+create(customer: User, cart: Cart, shippingAddress: Address): Order`
-- `+confirmByAdmin(admin: User): boolean`
-- `+cancelByAdmin(admin: User, reason: string): void`
-- `+cancelByCustomer(customer: User): void`
+- `+confirmByAdmin(admin: User): void`
+- `+cancel(): void`
 - `+ship(): void`
 - `+deliver(): void`
 - `+calculateTotalRevenue(): decimal`
