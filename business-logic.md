@@ -116,6 +116,17 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
   4. Update stock quantity.
   5. Set price and sale price.
 
+#### UC-06b: Manage Artists (Admin)
+- **Actor**: Admin
+- **Main Flow**:
+  1. The admin accesses the "Artist Management" page.
+  2. The system displays a list of all artists.
+  3. The admin can add a new artist by providing a name, bio, and image.
+  4. The admin can edit the information of an existing artist.
+  5. The admin can delete an artist.
+- **Business Rule**:
+  - An artist cannot be deleted if they are associated with any existing products.
+
 ---
 
 ### 3.3. Cart and Checkout
