@@ -1,0 +1,43 @@
+@startuml "UC-1: Account & Profile Management"
+
+left to right direction
+
+actor Guest
+actor Customer
+actor Admin
+
+Customer --|> Guest
+
+rectangle "Rill System" {
+  usecase "Register" as UC1
+  usecase "Login" as UC2
+  usecase "Logout" as UC2b
+  usecase "Update Personal Info" as UC3
+  usecase "Manage Shipping Addresses" as UC4
+}
+
+' Guest actions
+Guest -- UC1
+Guest -- UC2
+
+' Customer actions
+Customer -- UC2b
+Customer -- UC3
+Customer -- UC4
+
+' Admin actions
+Admin -- UC2
+Admin -- UC2b
+
+' Breakdown of Manage Shipping Addresses
+UC4 .> (Add New Address) : <<include>>
+UC4 .> (Edit Address) : <<include>>
+UC4 .> (Delete Address) : <<include>>
+UC4 .> (Set as Default) : <<include>>
+
+note "Requires authentication" as N1
+(UC2b) .. N1
+(UC3) .. N1
+(UC4) .. N1
+
+@enduml
