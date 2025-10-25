@@ -5,7 +5,9 @@
 ' Bổ sung actor Guest và mối quan hệ kế thừa
 actor Customer
 actor Guest
+actor Admin
 Customer --|> Guest
+Admin --|> Guest
 
 ' --- 1. ĐỊNH NGHĨA TẤT CẢ CÁC PHẦN TỬ ---
 rectangle "Rill System" {

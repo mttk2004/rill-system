@@ -26,14 +26,13 @@ Guest -- UC_Auth
 Guest -- UC_Browse
 
 ' Customer Use Cases
-Customer -- UC_Auth
 Customer -- UC_Profile
 Customer -- UC_Cart
 Customer -- UC_Order
 Customer -- UC_Review
 
 ' Admin Use Cases
-Admin -- UC_Auth
+Admin -- UC_Profile
 Admin -- UC_Admin_Product
 Admin -- UC_Admin_Order
 Admin -- UC_Admin_Customer

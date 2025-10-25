@@ -1,4 +1,4 @@
-@startuml "UC-3: Admin Functions - Final Clean Layout"
+@startuml "UC-3: Admin Functions - Final Detailed Layout"
 !theme plain
 
 actor Admin
@@ -14,11 +14,12 @@ rectangle "Rill System" {
     usecase "Update Shipping Status" as UC_UpdateStatus
     usecase "Cancel Order" as UC_Cancel
   }
-  package "User Management" {
-    usecase "View Customer Info" as UC_Users
+  package "Customer Information" {
+    usecase "View Customer Info" as UC_ViewInfo
   }
 }
 
+' Use case con cho Catalog Management
 usecase "(Add Product)" as AddProd
 usecase "(Edit Product)" as EditProd
 usecase "(Delete Product)" as DelProd
@@ -26,12 +27,15 @@ usecase "(Add Artist)" as AddArtist
 usecase "(Edit Artist)" as EditArtist
 usecase "(Delete Artist)" as DelArtist
 
-' --- 2. SẮP XẾP BỐ CỤC BẰNG LIÊN KẾT ẨN (SỬA LỖI TẠI ĐÂY) ---
-' Thay vì nhóm, ta nối phần tử cuối của package trước với phần tử đầu của package sau
-UC_Artists -[hidden]right- UC_Process
-UC_Cancel -[hidden]right- UC_Users
+' Use case con cho Customer Information
+usecase "(View Personal Info)" as ViewProfile
+usecase "(View Order History)" as ViewHistory
 
-' Sắp xếp các use case con thành cột bên phải
+' --- 2. SẮP XẾP BỐ CỤC BẰNG LIÊN KẾT ẨN ---
+UC_Artists -[hidden]right- UC_Process
+UC_Cancel -[hidden]right- UC_ViewInfo
+
+' Sắp xếp các use case con thành các cột riêng biệt bên phải
 UC_Products -[hidden]right- AddProd
 AddProd -[hidden]down- EditProd
 EditProd -[hidden]down- DelProd
@@ -39,15 +43,21 @@ DelProd -[hidden]down- AddArtist
 AddArtist -[hidden]down- EditArtist
 EditArtist -[hidden]down- DelArtist
 
+UC_ViewInfo -[hidden]right- ViewProfile
+ViewProfile -[hidden]down- ViewHistory
+
+
 ' --- 3. VẼ CÁC MỐI QUAN HỆ HỢP LỆ ---
 Admin --> UC_Products
 Admin --> UC_Artists
 Admin --> UC_Process
 Admin --> UC_Cancel
-Admin --> UC_Users
+' **SỬA LỖI TẠI ĐÂY: Xóa comment khỏi dòng này**
+Admin --> UC_ViewInfo
 
 UC_Process .right.> UC_UpdateStatus : <<extend>>
 
+' Quan hệ <<include>> cho Catalog
 UC_Products .right.> AddProd   : <<include>>
 UC_Products .right.> EditProd  : <<include>>
 UC_Products .right.> DelProd   : <<include>>
@@ -55,10 +65,15 @@ UC_Artists .right.> AddArtist : <<include>>
 UC_Artists .right.> EditArtist: <<include>>
 UC_Artists .right.> DelArtist : <<include>>
 
+' Quan hệ <<include>> cho Customer Info
+UC_ViewInfo .right.> ViewProfile : <<include>>
+UC_ViewInfo .right.> ViewHistory : <<include>>
+
+
 ' --- 4. GHI CHÚ ---
 note "All use cases require admin authentication" as AuthNote
 (Catalog Management) .. AuthNote
 (Order Fulfillment) .. AuthNote
-(User Management) .. AuthNote
+(Customer Information) .. AuthNote
 
 @enduml

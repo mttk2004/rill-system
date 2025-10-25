@@ -42,6 +42,7 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
   - Manage orders (confirm, cancel, update status)
   - View dashboard and statistics
   - View customer information
+  - Update personal information
 
 ---
 

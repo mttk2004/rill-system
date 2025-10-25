@@ -1,5 +1,4 @@
-@startuml "UC-1: Account & Profile Management - Final Layout"
-' Giao diện gọn gàng
+@startuml "UC-1: Account & Profile Management - Final Consistent Layout"
 !theme plain
 
 ' --- ACTORS ---
@@ -7,8 +6,9 @@ actor Customer
 actor Guest
 actor Admin
 
-' Quan hệ kế thừa
-Customer --|> Guest
+' Sắp xếp các actor thành một cột bên trái cho gọn gàng
+Admin -[hidden]down- Guest
+Guest -[hidden]down- Customer
 
 ' --- SYSTEM BOUNDARY ---
 rectangle "Rill System" {
@@ -21,6 +21,8 @@ rectangle "Rill System" {
   ' Dàn hàng ngang các use case
   UC1 -[hidden]right- UC2
   UC3 -[hidden]right- UC4
+  ' Căn chỉnh cột actor với cột use case
+  Customer -[hidden]right- UC3
 }
 
 ' --- SUB USE CASES for Address Management ---
@@ -38,14 +40,26 @@ package "Address Management Details" {
 
 ' --- RELATIONSHIPS ---
 
-' Actor -> Use Cases
-Guest -up-> UC1
-Guest -up-> UC2
-Admin -up-> UC2
-Admin -up-> UC2b
+' **THAY ĐỔI CHÍNH Ở ĐÂY**
+' 1. Bổ sung kế thừa Admin --|> Guest
+Customer --|> Guest
+Admin --|> Guest
+
+' 2. Gán quyền cho từng Actor
+' Guest có thể Đăng ký hoặc Đăng nhập
+Guest --> UC1
+Guest --> UC2
+
+' Admin và Customer (đã đăng nhập) có thể Đăng xuất
+Admin --> UC2b
 Customer --> UC2b
+
+' Customer có thể quản lý thông tin cá nhân của họ
 Customer --> UC3
 Customer --> UC4
+
+' Admin chỉ có thể Đăng nhập (kế thừa từ Guest) và Đăng xuất
+' 3. Xóa đường nối sai từ Admin tới "Update Personal Info"
 
 ' Quan hệ <<include>>
 UC4 .down.> Add       : <<include>>
@@ -53,11 +67,8 @@ UC4 .down.> Edit      : <<include>>
 UC4 .down.> Delete    : <<include>>
 UC4 .down.> SetDefault: <<include>>
 
-' --- NOTES (SỬA LỖI TẠI ĐÂY) ---
-' 1. Đặt ghi chú và gán cho nó một cái tên (alias) là "AuthNote"
+' --- NOTES ---
 note "Requires authentication" as AuthNote
-
-' 2. Nối các use case trực tiếp tới tên "AuthNote"
 UC3 .. AuthNote
 UC4 .. AuthNote
 UC2b .. AuthNote

@@ -9,7 +9,8 @@ graph TD
         B1["Register Account (Guest)"]
         B2["Login (Customer, Admin)"]
         B3["Logout (Customer, Admin)"]
-        B4["Manage Shipping Addresses (Customer)"]
+        B4["Update Personal Information (Customer, Admin)"]
+        B5["Manage Shipping Addresses (Customer)"]
     end
     subgraph "Product & Catalog Management"
         C1["Browse & Search Products (All)"]
@@ -36,6 +37,7 @@ graph TD
     B --> B2
     B --> B3
     B --> B4
+    B --> B5
     C --> C1
     C --> C2
     D --> D1
