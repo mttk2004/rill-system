@@ -1,52 +1,64 @@
-@startuml "UC-3: Admin Functions"
-' Layout improvement for better organization
-
+@startuml "UC-3: Admin Functions - Final Clean Layout"
 !theme plain
 
 actor Admin
 
+' --- 1. ĐỊNH NGHĨA CÁC PHẦN TỬ ---
 rectangle "Rill System" {
-
   package "Catalog Management" {
-    usecase "Manage Products" as UC6
-    usecase "Manage Artists" as UC6b
+    usecase "Manage Products" as UC_Products
+    usecase "Manage Artists" as UC_Artists
   }
-
   package "Order Fulfillment" {
-    usecase "Process Order" as UC9
-    usecase "Update Shipping Status" as UC10
-    usecase "Cancel Order" as UC11
+    usecase "Process Order" as UC_Process
+    usecase "Update Shipping Status" as UC_UpdateStatus
+    usecase "Cancel Order" as UC_Cancel
   }
-
   package "User Management" {
-    usecase "Manage Customer Info" as UC13
+    usecase "View Customer Info" as UC_Users
   }
 }
 
-' Positioning and relationships
-Admin -down-> UC6
-Admin -down-> UC6b
-Admin -down-> UC9
-Admin -down-> UC10
-Admin -down-> UC11
-Admin -down-> UC13
+usecase "(Add Product)" as AddProd
+usecase "(Edit Product)" as EditProd
+usecase "(Delete Product)" as DelProd
+usecase "(Add Artist)" as AddArtist
+usecase "(Edit Artist)" as EditArtist
+usecase "(Delete Artist)" as DelArtist
 
-' Logical flow in Order Fulfillment
-UC9 .right.> UC10 : <<extend>>
+' --- 2. SẮP XẾP BỐ CỤC BẰNG LIÊN KẾT ẨN (SỬA LỖI TẠI ĐÂY) ---
+' Thay vì nhóm, ta nối phần tử cuối của package trước với phần tử đầu của package sau
+UC_Artists -[hidden]right- UC_Process
+UC_Cancel -[hidden]right- UC_Users
 
-' Breakdown of Product Management
-UC6 .> (Add Product) : <<include>>
-UC6 .> (Edit Product) : <<include>>
-UC6 .> (Delete Product) : <<include>>
+' Sắp xếp các use case con thành cột bên phải
+UC_Products -[hidden]right- AddProd
+AddProd -[hidden]down- EditProd
+EditProd -[hidden]down- DelProd
+DelProd -[hidden]down- AddArtist
+AddArtist -[hidden]down- EditArtist
+EditArtist -[hidden]down- DelArtist
 
-' Breakdown of Artist Management
-UC6b .> (Add Artist) : <<include>>
-UC6b .> (Edit Artist) : <<include>>
-UC6b .> (Delete Artist) : <<include>>
+' --- 3. VẼ CÁC MỐI QUAN HỆ HỢP LỆ ---
+Admin --> UC_Products
+Admin --> UC_Artists
+Admin --> UC_Process
+Admin --> UC_Cancel
+Admin --> UC_Users
 
-note "All use cases require admin authentication" as N1
-UC6 .. N1
-UC9 .. N1
-UC13 .. N1
+UC_Process .right.> UC_UpdateStatus : <<extend>>
+
+UC_Products .right.> AddProd   : <<include>>
+UC_Products .right.> EditProd  : <<include>>
+UC_Products .right.> DelProd   : <<include>>
+UC_Artists .right.> AddArtist : <<include>>
+UC_Artists .right.> EditArtist: <<include>>
+UC_Artists .right.> DelArtist : <<include>>
+
+' --- 4. GHI CHÚ ---
+note "All use cases require admin authentication" as AuthNote
+(Catalog Management) .. AuthNote
+(Order Fulfillment) .. AuthNote
+(User Management) .. AuthNote
 
 @enduml

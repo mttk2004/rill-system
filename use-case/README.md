@@ -83,7 +83,7 @@ Use case này mô tả toàn bộ luồng mua sắm của một khách hàng đ�
 ## Mô tả cho UC-3: Admin Functions
 
 ### Tóm tắt
-Use case này mô tả các hoạt động quản trị hệ thống được thực hiện bởi Admin. Các hoạt động này bao gồm quản lý danh mục (sản phẩm, nghệ sĩ), xử lý và thực thi đơn hàng (xác nhận, cập nhật trạng thái), và quản lý thông tin khách hàng.
+Use case này mô tả các hoạt động quản trị hệ thống được thực hiện bởi Admin. Các hoạt động này bao gồm quản lý danh mục (sản phẩm, nghệ sĩ), xử lý và thực thi đơn hàng (xác nhận, cập nhật trạng thái), và xem thông tin khách hàng.
 
 ### Dòng sự kiện chính (Happy Path)
 1.  Admin đăng nhập vào trang quản trị.
@@ -93,7 +93,7 @@ Use case này mô tả các hoạt động quản trị hệ thống được th
 5.  Hệ thống cập nhật trạng thái đơn hàng thành "Confirmed" và tự động trừ số lượng tồn kho của các sản phẩm tương ứng.
 6.  Sau khi giao hàng cho đơn vị vận chuyển, Admin cập nhật trạng thái đơn hàng thành "Shipping".
 7.  Khi nhận được xác nhận giao hàng thành công, Admin cập nhật trạng thái thành "Delivered".
-8.  Admin truy cập mục quản lý khách hàng để xem lịch sử mua hàng của một khách hàng cụ thể.
+8.  Admin truy cập mục xem thông tin khách hàng để xem lịch sử mua hàng của một khách hàng cụ thể.
 
 ### Dòng sự kiện phụ (Alternative Flows)
 * **Xóa nghệ sĩ không thành công:** Admin cố gắng xóa một nghệ sĩ đang được liên kết với ít nhất một sản phẩm. Hệ thống sẽ hiển thị thông báo lỗi và không cho phép xóa.

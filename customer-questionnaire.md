@@ -46,7 +46,7 @@
 16. **Quản lý Sản phẩm:** Giao diện quản lý sản phẩm cần cho phép Admin thực hiện những thao tác nào? (Ví dụ: thêm/sửa/xóa sản phẩm, cập nhật giá, quản lý số lượng tồn kho,...)
 17. **Quản lý Nghệ sĩ/Thể loại:** Admin có cần một mục riêng để quản lý danh sách các nghệ sĩ và thể loại nhạc không?
 18. **Quản lý Đơn hàng:** Quy trình xử lý một đơn hàng từ khi được tạo đến khi hoàn thành sẽ bao gồm những bước nào? (Ví dụ: Chờ xác nhận → Đã xác nhận → Đang giao hàng → Đã giao → Hủy)
-19. **Quản lý Khách hàng:** Admin có cần xem danh sách khách hàng và lịch sử mua hàng của họ không? Admin có được quyền chỉnh sửa thông tin của khách hàng không?
+19. **Xem thông tin Khách hàng:** Admin có cần xem danh sách khách hàng và lịch sử mua hàng của họ không? Admin có được quyền chỉnh sửa thông tin của khách hàng không?
 20. **Báo cáo & Thống kê:** Admin cần xem những loại báo cáo nào để theo dõi tình hình kinh doanh? (Ví dụ: tổng doanh thu theo ngày/tháng, sản phẩm bán chạy nhất, lượng đơn hàng,...)
 21. **Quản lý Mã giảm giá:** Hệ thống có cần chức năng tạo và quản lý các mã giảm giá (vouchers/coupons) không?
 

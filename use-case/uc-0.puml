@@ -14,7 +14,7 @@ rectangle "Rill System" {
   usecase "Review Products" as UC_Review
   usecase "Manage Products & Artists" as UC_Admin_Product
   usecase "Manage Orders" as UC_Admin_Order
-  usecase "Manage Customers" as UC_Admin_Customer
+  usecase "View Customer Info" as UC_Admin_Customer
 }
 
 ' Actor Relationships

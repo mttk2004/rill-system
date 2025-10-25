@@ -1,42 +1,71 @@
-@startuml "UC-2: Customer Shopping Flow"
-' Layout improvement for a clear, top-to-bottom flow
-
+@startuml "UC-2: Customer Shopping Flow - Final with Guest"
 !theme plain
 
+' --- ACTORS ---
+' Bổ sung actor Guest và mối quan hệ kế thừa
 actor Customer
+actor Guest
+Customer --|> Guest
 
+' --- 1. ĐỊNH NGHĨA TẤT CẢ CÁC PHẦN TỬ ---
 rectangle "Rill System" {
-  usecase "Browse & Search Products" as UC4
-  usecase "Manage Shopping Cart" as UC7
-  usecase "Place Order" as UC8
-  usecase "Cancel Order" as UC11
-  usecase "Review Product" as UC12
+  usecase "Browse & Search Products" as UC_Browse
+  usecase "Manage Shopping Cart" as UC_Cart
+  usecase "Place Order" as UC_Order
+  usecase "Review Product" as UC_Review
 }
+usecase "(Add Item)" as AddItem
+usecase "(Update Quantity)" as UpdateQty
+usecase "(Remove Item)" as RemoveItem
+usecase "(Select Shipping Address)" as SelectAddr
+usecase "(Perform Stock Check)" as StockCheck
+usecase "(Clear Cart)" as ClearCart
+usecase "(Verify Order Status is 'Delivered')" as VerifyStatus
+usecase "Cancel Order" as UC_Cancel
 
-' Arrange use cases in a logical top-to-bottom flow
-Customer --> UC4
-UC4 -down-> UC7
-UC7 -down-> UC8
-UC8 -left-> UC11 : <<extend>>\n(If order is pending)
-UC8 -down-> UC12
+' --- 2. SẮP XẾP BỐ CỤC BẰNG LIÊN KẾT ẨN ---
+' Vẫn giữ cách sắp xếp dọc để gợi ý về luồng chảy
+UC_Browse -[hidden]down- UC_Cart
+UC_Cart -[hidden]down- UC_Order
+UC_Order -[hidden]down- UC_Review
 
-' Breakdown of Manage Shopping Cart
-UC7 .> (Add Item) : <<include>>
-UC7 .> (Update Quantity) : <<include>>
-UC7 .> (Remove Item) : <<include>>
+' Sắp xếp các use case phụ
+UC_Cancel -[hidden]right- UC_Order
+UC_Order -[hidden]right- SelectAddr
+SelectAddr -[hidden]down- StockCheck
+StockCheck -[hidden]down- ClearCart
+UC_Cart -[hidden]right- AddItem
+AddItem -[hidden]down- UpdateQty
+UpdateQty -[hidden]down- RemoveItem
+UC_Review -[hidden]right- VerifyStatus
 
-' Breakdown of Place Order
-UC8 .> (Select Shipping Address) : <<include>>
-UC8 .> (Perform Stock Check) : <<include>>
-UC8 .> (Clear Cart) : <<include>>
+' --- 3. VẼ CÁC MỐI QUAN HỆ HỢP LỆ ---
 
-' A customer can only review a product after the order is delivered
-(UC12) .> (Verify Order Status is 'Delivered') : <<include>>
+' **THAY ĐỔI CHÍNH Ở ĐÂY**
+' Guest chỉ có thể Browse & Search
+Guest --> UC_Browse
 
-note "All use cases require authentication" as N1
-UC7 .. N1
-UC8 .. N1
-UC11 .. N1
-UC12 .. N1
+' Customer có thể làm mọi thứ (kế thừa quyền của Guest)
+Customer --> UC_Cart
+Customer --> UC_Order
+Customer --> UC_Review
+
+' Quan hệ <<include>>
+UC_Cart .right.> AddItem       : <<include>>
+UC_Cart .right.> UpdateQty     : <<include>>
+UC_Cart .right.> RemoveItem    : <<include>>
+UC_Order .right.> SelectAddr   : <<include>>
+UC_Order .right.> StockCheck   : <<include>>
+UC_Order .right.> ClearCart    : <<include>>
+UC_Review .right.> VerifyStatus : <<include>>
+
+' Quan hệ <<extend>>
+UC_Cancel .right.> UC_Order : <<extend>>\n(If order is pending)
+
+' --- 4. GHI CHÚ ---
+note bottom of UC_Review
+  All use cases except "Browse & Search"
+  require authentication.
+end note
 
 @enduml

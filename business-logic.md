@@ -41,7 +41,7 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
   - Manage artists (add, edit, delete)
   - Manage orders (confirm, cancel, update status)
   - View dashboard and statistics
-  - Manage customer information
+  - View customer information
 
 ---
 
@@ -206,10 +206,10 @@ Rill is an e-commerce system specializing in selling vinyl records online, servi
 ---
 
 ### 3.6. Administration
-#### UC-13: Manage Customer Information
+#### UC-13: View Customer Infomation
 - **Actor**: Admin
 - **Main Flow**:
-  1. The admin accesses the "Customer Management" page.
+  1. The admin accesses the "Customer Information" page.
   2. The system displays a list of all customers.
   3. The admin can search for a customer by name or email.
   4. The admin can select a customer to view their detailed information, including their address list and complete order history.

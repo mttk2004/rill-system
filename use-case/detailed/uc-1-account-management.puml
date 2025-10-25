@@ -1,48 +1,65 @@
-@startuml "UC-1: Account & Profile Management"
-' Layout improvement for better readability
-
+@startuml "UC-1: Account & Profile Management - Final Layout"
+' Giao diện gọn gàng
 !theme plain
 
-actor Guest
+' --- ACTORS ---
 actor Customer
+actor Guest
 actor Admin
 
+' Quan hệ kế thừa
 Customer --|> Guest
 
+' --- SYSTEM BOUNDARY ---
 rectangle "Rill System" {
   usecase "Register" as UC1
   usecase "Login" as UC2
   usecase "Logout" as UC2b
   usecase "Update Personal Info" as UC3
   usecase "Manage Shipping Addresses" as UC4
+
+  ' Dàn hàng ngang các use case
+  UC1 -[hidden]right- UC2
+  UC3 -[hidden]right- UC4
 }
 
-' Positioning actors
-Guest -[hidden]down-> Customer
-Admin -[hidden]down- UC2b
+' --- SUB USE CASES for Address Management ---
+package "Address Management Details" {
+  usecase "Add New Address" as Add
+  usecase "Edit Address" as Edit
+  usecase "Delete Address" as Delete
+  usecase "Set as Default" as SetDefault
 
-' Guest actions are on the left
+  ' Dàn hàng ngang các use case con
+  Add -[hidden]right- Edit
+  Edit -[hidden]right- Delete
+  Delete -[hidden]right- SetDefault
+}
+
+' --- RELATIONSHIPS ---
+
+' Actor -> Use Cases
 Guest -up-> UC1
 Guest -up-> UC2
-
-' Admin actions are on the right
 Admin -up-> UC2
 Admin -up-> UC2b
+Customer --> UC2b
+Customer --> UC3
+Customer --> UC4
 
-' Customer actions are in the center
-Customer -- UC2b
-Customer -- UC3
-Customer -- UC4
+' Quan hệ <<include>>
+UC4 .down.> Add       : <<include>>
+UC4 .down.> Edit      : <<include>>
+UC4 .down.> Delete    : <<include>>
+UC4 .down.> SetDefault: <<include>>
 
-' Breakdown of Manage Shipping Addresses
-UC4 .> (Add New Address) : <<include>>
-UC4 .> (Edit Address) : <<include>>
-UC4 .> (Delete Address) : <<include>>
-UC4 .> (Set as Default) : <<include>>
+' --- NOTES (SỬA LỖI TẠI ĐÂY) ---
+' 1. Đặt ghi chú và gán cho nó một cái tên (alias) là "AuthNote"
+note "Requires authentication" as AuthNote
 
-note "Requires authentication" as N1
-UC3 .. N1
-UC4 .. N1
-UC2b .. N1
+' 2. Nối các use case trực tiếp tới tên "AuthNote"
+UC3 .. AuthNote
+UC4 .. AuthNote
+UC2b .. AuthNote
 
 @enduml
